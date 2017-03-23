@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+    <head>
+
+        <title>Shooter - Full screen</title>
+
+        <style>
+            canvas {
+                position: fixed;
+                top: 0;
+                left: 0;
+                cursor: none;
+            }
+        </style>
+
+    </head>
+    <body>
+
+        <script src="dist/shooter.min.js"></script>
+
+        <script>
+            var game = new Shooter.Game({
+                width: window.innerWidth,
+                height: window.innerHeight,
+                parent: document.body,
+                enemyFill: 'white',
+                bulletFill: 'white',
+                gunFill: 'white',
+                statsFill: 'white',
+                bgFill: 'green'
+            });
+        </script>
+
+    </body>
+</html>

@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+    <head>
+
+        <title>Shooter</title>
+
+        <style>
+            canvs {
+                cursor: none;
+                box-sizing: border-box;
+                border: 1px solid silver;
+            }
+        </style>
+
+    </head>
+    <body>
+
+        <script src="shooter/game.js"></script>
+        <script src="shooter/battle.js"></script>
+        <script src="shooter/gun.js"></script>
+        <script src="shooter/bullet.js"></script>
+        <script src="shooter/enemy.js"></script>
+        <script src="shooter/stats.js"></script>
+
+        <script>
+            var game = new Shooter.Game({
+                width: 500,
+                height: 500,
+                parent: document.body,
+                enemyFill: 'green',
+                bulletFill: 'green',
+                gunFill: 'green',
+                statsFill: 'black',
+                bgFill: 'white'
+            });
+        </script>
+
+    </body>
+</html>
