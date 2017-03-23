@@ -1,7 +1,9 @@
 
-(function() {
+(function(Shooter) {
 
     Shooter.Enemy = Enemy;
+
+    var BulletResult = Shooter.BulletResult;
 
     function Enemy(ctx, x, y, width, height, fill) {
 
@@ -37,7 +39,7 @@
 
     Enemy.prototype.hitByBullet = function(bullet) {
         return (
-            bullet.result === Shooter.BulletResult.None &&
+            bullet.result === BulletResult.None &&
             bullet.top <= this.bottom &&
             (
                 (bullet.left >= this.left && bullet.left <= this.right) ||
@@ -46,4 +48,4 @@
         );
     }
 
-})();
+})(window.Shooter);

@@ -1,5 +1,5 @@
 
-(function() {
+(function(Shooter) {
 
     Shooter.Stats = Stats;
 
@@ -45,4 +45,4 @@
         ctx.fillText(this.text, this.x, this.y);
     }
 
-})();
+})(window.Shooter);

@@ -1,7 +1,9 @@
 
-(function() {
+(function(Shooter) {
 
     Shooter.Battle = Battle;
+
+    var BulletResult = Shooter.BulletResult;
 
     function Battle(options) {
 
@@ -159,14 +161,14 @@
             bullet = bullets[i];
 
             // Skip bullets with result Hit or Miss
-            if (bullet.result === Shooter.BulletResult.Hit ||
-                bullet.result === Shooter.BulletResult.Miss)  {
+            if (bullet.result === BulletResult.Hit ||
+                bullet.result === BulletResult.Miss)  {
                 continue;
             }
 
             // Set bullet result to Miss if bullet out of canvas
             if (bullet.bottom <= 0) {
-                bullet.result = Shooter.BulletResult.Miss;
+                bullet.result = BulletResult.Miss;
                 continue;
             }
 
@@ -241,9 +243,9 @@
 
             bulletResult = bullets[i].result;
 
-            if (bulletResult === Shooter.BulletResult.Hit) {
+            if (bulletResult === BulletResult.Hit) {
                 ++stats.hit;
-            } else if (bulletResult === Shooter.BulletResult.Miss) {
+            } else if (bulletResult === BulletResult.Miss) {
                 ++stats.miss;
             }
 
@@ -290,11 +292,11 @@
     }
 
     Battle.prototype.destroy = function() {
-        this.parent.removeChild(this.canvas);
+        this.options.parent.removeChild(this.canvas);
     }
 
     Battle.prototype.perOfNum = function(per, num) {
         return Math.floor(per * num / 100);
     }
 
-})();
+})(window.Shooter);

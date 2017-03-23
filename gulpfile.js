@@ -5,11 +5,11 @@ var gulp = require('gulp'),
 gulp.task('dist', function() {
     return gulp.src([
             'shooter/game.js',
-            'shooter/battle.js',
             'shooter/gun.js',
             'shooter/bullet.js',
             'shooter/enemy.js',
-            'shooter/stats.js'
+            'shooter/stats.js',
+            'shooter/battle.js'
         ])
         .pipe(concat('shooter.min.js'))
         .pipe(uglify())

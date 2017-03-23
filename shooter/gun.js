@@ -1,5 +1,5 @@
 
-(function() {
+(function(Shooter) {
 
     Shooter.Gun = Gun;
 
@@ -42,4 +42,4 @@
         this.ctx.fillRect(this.x, this.y, this.width, this.height);
     }
 
-})();
+})(window.Shooter);

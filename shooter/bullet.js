@@ -1,5 +1,5 @@
 
-(function() {
+(function(Shooter) {
 
     var BulletResult = { 
         None: 0,
@@ -45,4 +45,4 @@
         ctx.fill();
     }
 
-})();
+})(window.Shooter);

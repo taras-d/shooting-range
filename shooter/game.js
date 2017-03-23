@@ -1,8 +1,9 @@
 
 (function() {
 
-    Shooter = {};
-    Shooter.Game = Game;
+    var Shooter = { Game: Game };
+
+    window.Shooter = Shooter;
 
     function Game(options) {
 
