@@ -65,8 +65,8 @@
 
         var width = this.perOfNum(6, this.width),
             height = this.perOfNum(6, this.width),
-            x = this.perOfNum(2, this.width),
-            y = stats.y - stats.fontSize - height;
+            x = Math.round( (this.width / 2) - (width / 2) ),
+            y = Math.round( stats.y - stats.fontSize - height );
             
         this.gun = new Shooter.Gun(
             this.ctx, x, y, width, height, this.options.gunFill );
