@@ -84,8 +84,9 @@ Battle.prototype.createBullet = function() {
         radius = this.perOfNum(1, this.width);
 
     bullets.push(
-        new Bullet(
-            this.ctx, x, y, radius, this.options.bulletFill )
+        new Bullet(this.ctx, x, y, radius, {
+            fill: this.options.bulletFill
+        })
     );
 
     this.bulletsLen = bullets.length;
@@ -117,8 +118,9 @@ Battle.prototype.createEnemies = function() {
     // Add new enemies
     for (var i = 0; i < enemiesInRow; ++i) {
         enemies.push(
-            new Enemy(
-                this.ctx, x, y, width, height, enemyFill )
+            new Enemy(this.ctx, x, y, width, height, {
+                fill: this.options.enemyFill
+            })
         );
         x += (width + gap);
     }
@@ -246,7 +248,7 @@ Battle.prototype.drawStats = function() {
         bulletStatus = bullets[i].status;
 
         if (bulletStatus === BulletStatus.Hit) {
-            ++stats.hit;
+            ++stats.hits;
         } else if (bulletStatus === BulletStatus.Miss) {
             ++stats.miss;
         }

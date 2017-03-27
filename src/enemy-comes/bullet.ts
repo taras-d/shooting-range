@@ -1,4 +1,3 @@
-
 import { Component } from './component';
 
 export enum BulletStatus { None, Miss, Hit };
@@ -9,12 +8,12 @@ export interface BulletOptions {
 
 export class Bullet extends Component {
 
-    public status = BulletStatus.None;
+    status = BulletStatus.None;
 
-    public left: number;
-    public right: number;
-    public top: number;
-    public bottom: number;
+    left: number;
+    right: number;
+    top: number;
+    bottom: number;
 
     constructor(
         ctx: CanvasRenderingContext2D, 

@@ -7,10 +7,10 @@ export interface GunOptions {
 
 export class Gun extends Component {
 
-    public left: number;
-    public right: number;
-    public top: number;
-    public bottom: number;
+    left: number;
+    right: number;
+    top: number;
+    bottom: number;
 
     constructor(
         ctx: CanvasRenderingContext2D, 

@@ -1,45 +1,63 @@
-
+import { Component } from './component';
 import { Bullet, BulletStatus } from './bullet';
 
-export function Enemy(ctx, x, y, width, height, fill) {
-
-    this.ctx = ctx;
-
-    this.width = width;
-    this.height = height;
-
-    this.fill = fill;
-
-    this.dead = false;
-
-    this.moveX(x);
-    this.moveY(y);
+export class EnemyOptions {
+    fill: string;
 }
 
-Enemy.prototype.moveX = function(x) {
-    this.x = x;
-    this.left = x;
-    this.right = x + this.width;
-}
+export class Enemy extends Component {
 
-Enemy.prototype.moveY = function(y) {
-    this.y = y;
-    this.top = y;
-    this.bottom = y + this.height;
-}
+    dead: boolean = false;
 
-Enemy.prototype.draw = function() {
-    this.ctx.fillStyle = this.fill;
-    this.ctx.fillRect(this.x, this.y, this.width, this.height);
-}
+    left: number;
+    right: number;
+    top: number;
+    bottom: number;
 
-Enemy.prototype.hitByBullet = function(bullet: Bullet) {
-    return (
-        bullet.status === BulletStatus.None &&
-        bullet.top <= this.bottom &&
-        (
-            (bullet.left >= this.left && bullet.left <= this.right) ||
-            (bullet.right >= this.left && bullet.right <= this.right)
-        )
-    );
+    constructor(
+        ctx: CanvasRenderingContext2D, 
+        x: number, 
+        y: number, 
+        public width: number, 
+        public height: number, 
+        public options: EnemyOptions
+    ) {
+        super(ctx, x, y);
+        this.moveX(x);
+        this.moveY(y);
+    }
+
+
+    moveX(x) {
+        this.x = x;
+        this.left = x;
+        this.right = x + this.width;
+    }
+
+    moveY(y) {
+        this.y = y;
+        this.top = y;
+        this.bottom = y + this.height;
+    }
+
+    draw() {
+
+        let ctx = this.ctx,
+            opts = this.options;
+
+        ctx.fillStyle = opts.fill;
+        ctx.fillRect(this.x, this.y, this.width, this.height);
+    }
+
+    hitByBullet(bullet: Bullet): boolean {
+        return (
+            bullet.status === BulletStatus.None &&
+            bullet.top <= this.bottom &&
+            (
+                (bullet.left >= this.left && bullet.left <= this.right) ||
+                (bullet.right >= this.left && bullet.right <= this.right)
+            )
+        );
+    }
+
 }
