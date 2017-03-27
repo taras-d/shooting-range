@@ -1,5 +1,5 @@
 import { Gun } from './gun';
-import { Bullet, BulletResult } from './bullet';
+import { Bullet, BulletStatus } from './bullet';
 import { Enemy } from './enemy';
 import { Stats } from './stats';
 
@@ -162,15 +162,15 @@ Battle.prototype.drawBullets = function() {
 
         bullet = bullets[i];
 
-        // Skip bullets with result Hit or Miss
-        if (bullet.result === BulletResult.Hit ||
-            bullet.result === BulletResult.Miss)  {
+        // Skip bullets with status Hit or Miss
+        if (bullet.status === BulletStatus.Hit ||
+            bullet.status === BulletStatus.Miss)  {
             continue;
         }
 
-        // Set bullet result to Miss if bullet out of canvas
+        // Set bullet status to Miss if bullet out of canvas
         if (bullet.bottom <= 0) {
-            bullet.result = BulletResult.Miss;
+            bullet.status = BulletStatus.Miss;
             continue;
         }
 
@@ -215,7 +215,7 @@ Battle.prototype.drawEnemies = function() {
         // Bullet hit enemy
         if (hitBullet) {
             enemy.dead = true;
-            hitBullet.result = BulletResult.Hit;
+            hitBullet.status = BulletStatus.Hit;
             continue;
         }
 
@@ -237,21 +237,21 @@ Battle.prototype.drawStats = function() {
 
     var bullets = this.bullets,
         bulletsLen = this.bulletsLen,
-        bulletResult;
+        bulletStatus;
 
     stats.clear();
 
     for (var i = 0; i < bulletsLen; ++i) {
 
-        bulletResult = bullets[i].result;
+        bulletStatus = bullets[i].status;
 
-        if (bulletResult === BulletResult.Hit) {
+        if (bulletStatus === BulletStatus.Hit) {
             ++stats.hit;
-        } else if (bulletResult === BulletResult.Miss) {
+        } else if (bulletStatus === BulletStatus.Miss) {
             ++stats.miss;
         }
 
-        stats.shoots += 1;
+        ++stats.shoots;
     }
 
     stats.draw();

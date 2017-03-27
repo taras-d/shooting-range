@@ -1,5 +1,5 @@
 
-import { BulletResult } from './bullet';
+import { Bullet, BulletStatus } from './bullet';
 
 export function Enemy(ctx, x, y, width, height, fill) {
 
@@ -33,9 +33,9 @@ Enemy.prototype.draw = function() {
     this.ctx.fillRect(this.x, this.y, this.width, this.height);
 }
 
-Enemy.prototype.hitByBullet = function(bullet) {
+Enemy.prototype.hitByBullet = function(bullet: Bullet) {
     return (
-        bullet.result === BulletResult.None &&
+        bullet.status === BulletStatus.None &&
         bullet.top <= this.bottom &&
         (
             (bullet.left >= this.left && bullet.left <= this.right) ||

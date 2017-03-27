@@ -42,7 +42,7 @@ export class Stats extends Component {
 
         this.prepareText();
 
-        var ctx = this.ctx,
+        let ctx = this.ctx,
             opts = this.options;
 
         ctx.font = `${opts.fontSize} ${opts.fontFamily}`;

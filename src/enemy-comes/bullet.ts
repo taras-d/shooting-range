@@ -1,41 +1,55 @@
 
-export var BulletResult = { 
-    None: 0,
-    Miss: 1, 
-    Hit: 2
-};
+import { Component } from './component';
 
-export function Bullet(ctx, x, y, radius, fill) {
+export enum BulletStatus { None, Miss, Hit };
 
-    this.ctx = ctx;
-
-    this.radius = radius;
-    this.fill = fill;
-
-    this.result = BulletResult.None;
-
-    this.moveX(x);
-    this.moveY(y);
+export interface BulletOptions {
+    fill: string;
 }
 
-Bullet.prototype.moveX = function(x) {
-    this.x = x;
-    this.left = x - this.radius;
-    this.right = x + this.radius;
-}
+export class Bullet extends Component {
 
-Bullet.prototype.moveY = function(y) {
-    this.y = y;
-    this.top = y - this.radius;
-    this.bottom = y + this.radius;
-}
+    public status = BulletStatus.None;
 
-Bullet.prototype.draw = function() {
+    public left: number;
+    public right: number;
+    public top: number;
+    public bottom: number;
 
-    var ctx = this.ctx;
+    constructor(
+        ctx: CanvasRenderingContext2D, 
+        x: number, 
+        y: number, 
+        public radius: number, 
+        public options: BulletOptions
+    ) {
+        super(ctx, x, y);
+        this.moveX(x);
+        this.moveY(y);
+    }
 
-    ctx.fillStyle = this.fill;
-    ctx.beginPath();
-    ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
-    ctx.fill();
+
+    moveX(x) {
+        this.x = x;
+        this.left = x - this.radius;
+        this.right = x + this.radius;
+    }
+
+    moveY(y) {
+        this.y = y;
+        this.top = y - this.radius;
+        this.bottom = y + this.radius;
+    }
+
+    draw () {
+        
+        let ctx = this.ctx,
+            opts = this.options;
+
+        ctx.fillStyle = opts.fill;
+        ctx.beginPath();
+        ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
+        ctx.fill();
+    }
+
 }

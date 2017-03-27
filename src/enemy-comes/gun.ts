@@ -32,11 +32,15 @@ export class Gun extends Component {
     }
 
     moveXWithin(x: number) {
+
         this.moveX(x);
+
+        let ctx = this.ctx;
+
         if (this.left < 0) {
             this.moveX(0);
-        } else if (this.right > this.ctx.canvas.width) {
-            this.moveX(this.ctx.canvas.width - this.width);
+        } else if (this.right > ctx.canvas.width) {
+            this.moveX(ctx.canvas.width - this.width);
         }
     }
 
