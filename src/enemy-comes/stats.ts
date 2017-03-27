@@ -1,42 +1,54 @@
 
-export function Stats(ctx, x, y, fontSize, fill) {
+import { Component } from './component';
 
-    this.ctx = ctx;
-
-    this.x = x;
-    this.y = y;
-
-    this.fontSize = fontSize;
-    this.fill = fill;
-
-    this.text = '';
-
-    this.clear();
+export interface StatsOptions {
+    fontSize: number;
+    fontFamily: string;
+    fill: string;
 }
 
-Stats.prototype.prepareText = function() {
-    this.text = 
-        'Shoots: ' + this.shoots + 
-        ' / Hits: ' + this.hit + 
-        ' / Miss: ' + this.miss;
-}
+export class Stats extends Component {
 
-Stats.prototype.clear = function() {
+    private text: string;
 
-    this.shoots = 0;
-    this.hit = 0;
-    this.miss = 0;
+    shoots: number;
+    hits: number;
+    miss: number;
 
-    this.prepareText();
-}
+    constructor(
+        ctx: CanvasRenderingContext2D, 
+        x: number, 
+        y: number, 
+        public options: StatsOptions
+    ) {
+        super(ctx, x, y);
+        this.clear();
+    }
 
-Stats.prototype.draw = function() {
+    prepareText() {
+        this.text = `Shoots: ${this.shoots} / Hits: ${this.hits} / Miss: ${this.miss}`;
+    }
 
-    this.prepareText();
+    clear() {
 
-    var ctx = this.ctx;
-    ctx.font = this.fontSize + 'px sans-serif';
-    ctx.fillStyle = this.fill;
-    ctx.textBaseline = 'top';
-    ctx.fillText(this.text, this.x, this.y);
+        this.shoots = 0;
+        this.hits = 0;
+        this.miss = 0;
+
+        this.prepareText();
+    }
+
+    draw() {
+
+        this.prepareText();
+
+        var ctx = this.ctx,
+            opts = this.options;
+
+        ctx.font = `${opts.fontSize} ${opts.fontFamily}`;
+        ctx.fillStyle = opts.fill;
+        ctx.textBaseline = 'top';
+        ctx.fillText(this.text, this.x, this.y);
+    }
+
 }

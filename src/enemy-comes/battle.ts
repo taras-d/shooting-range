@@ -53,8 +53,11 @@ Battle.prototype.createStats = function() {
         y = this.perOfNum(95, this.height),
         fontSize = this.perOfNum(2.5, this.height);
 
-    this.stats = new Stats(
-        this.ctx, x, y, fontSize, this.options.statsFill );
+    this.stats = new Stats(this.ctx, x, y, {
+        fontSize: fontSize,
+        fontFamily: 'sans-serif',
+        fill: this.options.statsFill
+    });
 }
 
 Battle.prototype.createGun = function() {
@@ -64,7 +67,7 @@ Battle.prototype.createGun = function() {
     var width = this.perOfNum(6, this.width),
         height = this.perOfNum(6, this.width),
         x = Math.round( (this.width / 2) - (width / 2) ),
-        y = Math.round( stats.y - stats.fontSize - height );
+        y = Math.round( stats.y - stats.options.fontSize - height );
         
     this.gun = new Gun(
         this.ctx, x, y, width, height, this.options.gunFill );
