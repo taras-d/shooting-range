@@ -1,13 +1,17 @@
 {
-  "name": "shooter-game",
+  "name": "enemy-comes",
   "version": "0.0.1",
-  "description": "Shooter game",
+  "description": "2D shooter game created in HTML5 canvas",
   "author": "taras-d",
   "license": "ISC",
   "private": true,
+  "scripts": {
+    "ts-compile": "webpack",
+    "ts-watch": "webpack -w"
+  },
   "devDependencies": {
-    "gulp": "^3.9.1",
-    "gulp-concat": "^2.6.1",
-    "gulp-uglify": "^2.1.2"
+    "awesome-typescript-loader": "^3.1.2",
+    "typescript": "^2.2.1",
+    "webpack": "^2.3.2"
   }
 }
