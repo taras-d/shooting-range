@@ -72,9 +72,9 @@ Game.prototype.onBulletsQueue = function() {
 Game.prototype.onMouseMove = function(event) {
 
     var gun = this.battle.gun,
-        x = event.clientX - this.canvasRect.left - gun.width / 2;
+        x = Math.round( event.clientX - this.canvasRect.left - gun.width / 2 );
 
-    gun.moveWithinX(x);
+    gun.moveXWithin(x);
     gun.draw();
 }
 

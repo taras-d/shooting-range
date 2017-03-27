@@ -69,8 +69,9 @@ Battle.prototype.createGun = function() {
         x = Math.round( (this.width / 2) - (width / 2) ),
         y = Math.round( stats.y - stats.options.fontSize - height );
         
-    this.gun = new Gun(
-        this.ctx, x, y, width, height, this.options.gunFill );
+    this.gun = new Gun(this.ctx, x, y, width, height, {
+        fill: this.options.gunFill
+    });
 }
 
 Battle.prototype.createBullet = function() {
