@@ -1,13 +1,14 @@
 {
-  "name": "enemy-comes",
+  "name": "shooting-range",
   "version": "0.0.1",
-  "description": "2D shooter game created in HTML5 canvas",
+  "description": "2D game created in HTML5 canvas",
   "author": "taras-d",
   "license": "ISC",
   "private": true,
   "scripts": {
-    "ts-compile": "webpack",
-    "ts-watch": "webpack -w"
+    "compile": "webpack --config webpack.dev.config.js",
+    "watch": "webpack -w --config webpack.dev.config.js",
+    "build": "webpack --config webpack.prod.config.js"
   },
   "devDependencies": {
     "awesome-typescript-loader": "^3.1.2",
