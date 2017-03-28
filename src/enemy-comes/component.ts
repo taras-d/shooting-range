@@ -1,5 +1,5 @@
 
-export abstract class Component {
+export class Component {
 
     constructor(
         protected ctx: CanvasRenderingContext2D,
@@ -7,6 +7,20 @@ export abstract class Component {
         public y: number
     ) {
 
+    }
+
+}
+
+export class RectComponent extends Component {
+
+    constructor(
+        ctx: CanvasRenderingContext2D,
+        x: number,
+        y: number,
+        public width: number,
+        public height: number
+    ) {
+        super(ctx, x, y);
     }
 
 }

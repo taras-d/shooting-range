@@ -62,7 +62,7 @@ Game.prototype.onFrameUpdate = function() {
 }
 
 Game.prototype.onNewEnemies = function() {
-    this.battle.createEnemies();
+    this.battle.createTargets();
 }
 
 Game.prototype.onBulletsQueue = function() {
@@ -74,7 +74,7 @@ Game.prototype.onMouseMove = function(event) {
     var gun = this.battle.gun,
         x = Math.round( event.clientX - this.canvasRect.left - gun.width / 2 );
 
-    gun.moveXWithin(x);
+    gun.moveTo(x);
     gun.draw();
 }
 

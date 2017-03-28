@@ -1,6 +1,6 @@
 import { Gun } from './gun';
 import { Bullet, BulletStatus } from './bullet';
-import { Enemy } from './enemy';
+import { Target } from './target';
 import { Stats } from './stats';
 
 export function Battle(options) {
@@ -24,13 +24,13 @@ Battle.prototype.newBattle = function() {
     this.bullets = [];
     this.bulletsLen = 0;
 
-    this.enemies = [];
-    this.enemiesLen = 0;
-    this.nearestEnemy = null;
+    this.targets = [];
+    this.targetsLen = 0;
+    this.closestTarget = null;
 
-    this.stats.clear();
+    this.stats.update(0, 0, 0);
 
-    this.createEnemies();
+    this.createTargets();
 
     this.draw();
 }
@@ -92,40 +92,40 @@ Battle.prototype.createBullet = function() {
     this.bulletsLen = bullets.length;
 }
 
-Battle.prototype.createEnemies = function() {
+Battle.prototype.createTargets = function() {
 
-    var enemies = this.enemies,
-        enemiesLen = this.enemiesLen,
-        enemiesInRow = 12,
-        enemyFill = this.options.enemyFill;
+    var targets = this.targets,
+        targetsLen = this.targetsLen,
+        targetsInRow = 12,
+        targetFill = this.options.enemyFill;
     
     var gap = this.perOfNum(1.8, this.width),
-        size = Math.round( (this.width - gap) / enemiesInRow ),
+        size = Math.round( (this.width - gap) / targetsInRow ),
         x = gap,
         y = gap,
         width = size - gap,
         height = size - gap;
 
-    // Shift down old enemies
-    for (var i = 0, enemy; i < enemiesLen; ++i) {
-        enemy = enemies[i];
-        if (!enemy.dead) {
-            enemy.moveY( enemy.bottom + gap );
-            enemy.draw();
+    // Shift down old targets
+    for (var i = 0, target; i < targetsLen; ++i) {
+        target = targets[i];
+        if (!target.hit) {
+            target.y = (target.y + target.height + gap);
+            target.draw();
         }
     }
 
-    // Add new enemies
-    for (var i = 0; i < enemiesInRow; ++i) {
-        enemies.push(
-            new Enemy(this.ctx, x, y, width, height, {
-                fill: this.options.enemyFill
+    // Add new targets
+    for (var i = 0; i < targetsInRow; ++i) {
+        targets.push(
+            new Target(this.ctx, x, y, width, height, {
+                fill: this.options.targetFill
             })
         );
         x += (width + gap);
     }
 
-    this.enemiesLen = enemies.length;
+    this.targetsLen = targets.length;
 }
 
 Battle.prototype.clear = function() {
@@ -139,7 +139,7 @@ Battle.prototype.draw = function() {
 
     this.drawGun();
     this.drawBullets();
-    this.drawEnemies();
+    this.drawTargets();
     this.drawStats();
 
     this.checkGameOver();
@@ -177,85 +177,84 @@ Battle.prototype.drawBullets = function() {
         }
 
         // Move and draw bullet
-        bullet.moveY( bullet.y - bulletStep );
+        bullet.y -= bulletStep;
         bullet.draw();
     }
 }
 
-Battle.prototype.drawEnemies = function() {
+Battle.prototype.drawTargets = function() {
 
-    var enemies = this.enemies,
-        enemiesLen = this.enemiesLen,
-        enemy;
+    var targets = this.targets,
+        targetsLen = this.targetsLen,
+        target;
     
     var bullets = this.bullets,
         bulletsLen = this.bulletsLen,
         bullet,
         hitBullet;
 
-    var nearestEnemy = enemies[0];
+    var closestTarget = targets[0];
 
-    for (var i = 0; i < enemiesLen; ++i) {
+    for (var i = 0; i < targetsLen; ++i) {
 
-        enemy = enemies[i];
+        target = targets[i];
 
-        // Skip dead enemies
-        if (enemy.dead) {
+        // Skip hit targets
+        if (target.hit) {
             continue;
         }
 
-        // Check if bullet hit enemy
+        // Check if bullet hit target
         hitBullet = null;
         for (var j = 0; j < bulletsLen; ++j) {
             bullet = bullets[j];
-            if (enemy.hitByBullet(bullet)) {
+            if (target.hitByBullet(bullet)) {
                 hitBullet = bullet;
                 break;
             }
         }
 
-        // Bullet hit enemy
+        // Bullet hit target
         if (hitBullet) {
-            enemy.dead = true;
+            target.hit = true;
             hitBullet.status = BulletStatus.Hit;
             continue;
         }
 
-        // Draw enemy
-        enemy.draw();
+        // Draw target
+        target.draw();
 
-        // Save nearest enemy
-        if (enemy.bottom > nearestEnemy.bottom) {
-            nearestEnemy = enemy;
+        // Save closest
+        if (target.y + target.height > closestTarget.y + closestTarget.height) {
+            closestTarget = target;
         }
     }
 
-    this.nearestEnemy = nearestEnemy;
+    this.closestTarget = closestTarget;
 }
 
 Battle.prototype.drawStats = function() {
-
-    var stats = this.stats;
 
     var bullets = this.bullets,
         bulletsLen = this.bulletsLen,
         bulletStatus;
 
-    stats.clear();
+    var stats = this.stats,
+        hits = 0,
+        miss = 0;
 
     for (var i = 0; i < bulletsLen; ++i) {
 
         bulletStatus = bullets[i].status;
 
         if (bulletStatus === BulletStatus.Hit) {
-            ++stats.hits;
+            ++hits;
         } else if (bulletStatus === BulletStatus.Miss) {
-            ++stats.miss;
+            ++miss;
         }
-
-        ++stats.shoots;
     }
 
+    stats.update(bulletsLen, hits, miss);
     stats.draw();
 }
 
@@ -290,8 +289,8 @@ Battle.prototype.drawGameOver = function() {
 
 Battle.prototype.checkGameOver = function() {
     this.gameOver = (
-        this.nearestEnemy &&
-        this.nearestEnemy.bottom >= this.gun.top
+        this.closestTarget &&
+        this.closestTarget.y + this.closestTarget.height >= this.gun.y
     );
 }
 

@@ -1,56 +1,39 @@
 
-import { Component } from './component';
+import { RectComponent } from './component';
 
 export interface GunOptions {
     fill: string;
 }
 
-export class Gun extends Component {
-
-    left: number;
-    right: number;
-    top: number;
-    bottom: number;
+export class Gun extends RectComponent {
 
     constructor(
         ctx: CanvasRenderingContext2D, 
         x: number,
         y: number, 
-        public width: number, 
-        public height: number,
+        width: number, 
+        height: number,
         public options: GunOptions
     ) {
-        super(ctx, x, y);
-        this.moveX(x);
-        this.moveY(y);
+        super(ctx, x, y, width, height);
     }
 
-    moveX(x: number) {
-        this.x = x;
-        this.left = x;
-        this.right = x + this.width;
-    }
+    moveTo(x: number): void {
 
-    moveXWithin(x: number) {
+        let ctx = this.ctx,
+            leftMin = 0,
+            leftMax = ctx.canvas.width - this.width;
 
-        this.moveX(x);
-
-        let ctx = this.ctx;
-
-        if (this.left < 0) {
-            this.moveX(0);
-        } else if (this.right > ctx.canvas.width) {
-            this.moveX(ctx.canvas.width - this.width);
+        if (x < leftMin) {
+            x = leftMin;
+        } else if (x > leftMax) {
+            x = leftMax;
         }
+
+        this.x = x;
     }
 
-    moveY(y: number) {
-        this.y = y;
-        this.top = y;
-        this.bottom = y + this.height;
-    }
-
-    draw() {
+    draw(): void {
 
         let opts = this.options,
             ctx = this.ctx;

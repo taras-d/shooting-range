@@ -8,11 +8,7 @@ export interface StatsOptions {
 
 export class Stats extends Component {
 
-    private text: string;
-
-    shoots: number;
-    hits: number;
-    miss: number;
+    text: string;
 
     constructor(
         ctx: CanvasRenderingContext2D, 
@@ -21,25 +17,14 @@ export class Stats extends Component {
         public options: StatsOptions
     ) {
         super(ctx, x, y);
-        this.clear();
+        this.update(0, 0, 0);
     }
 
-    prepareText() {
-        this.text = `Shoots: ${this.shoots} / Hits: ${this.hits} / Miss: ${this.miss}`;
+    update(shoots: number, hits: number, miss: number): void {
+        this.text = `Shoots: ${shoots} / Hits: ${hits} / Miss: ${miss}`;
     }
 
-    clear() {
-
-        this.shoots = 0;
-        this.hits = 0;
-        this.miss = 0;
-
-        this.prepareText();
-    }
-
-    draw() {
-
-        this.prepareText();
+    draw(): void {
 
         let ctx = this.ctx,
             opts = this.options;

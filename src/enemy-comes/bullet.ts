@@ -10,11 +10,6 @@ export class Bullet extends Component {
 
     status = BulletStatus.None;
 
-    left: number;
-    right: number;
-    top: number;
-    bottom: number;
-
     constructor(
         ctx: CanvasRenderingContext2D, 
         x: number, 
@@ -23,24 +18,9 @@ export class Bullet extends Component {
         public options: BulletOptions
     ) {
         super(ctx, x, y);
-        this.moveX(x);
-        this.moveY(y);
     }
 
-
-    moveX(x) {
-        this.x = x;
-        this.left = x - this.radius;
-        this.right = x + this.radius;
-    }
-
-    moveY(y) {
-        this.y = y;
-        this.top = y - this.radius;
-        this.bottom = y + this.radius;
-    }
-
-    draw () {
+    draw(): void {
         
         let ctx = this.ctx,
             opts = this.options;
