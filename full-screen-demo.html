@@ -2,7 +2,7 @@
 <html>
     <head>
 
-        <title>The enemy comes - Full screen</title>
+        <title>Full screen demo</title>
 
         <style>
             canvas {
@@ -19,15 +19,15 @@
         <script src="src/bundle.js"></script>
 
         <script>
-            var game = new EnemyComes({
+            var game = new ShootingRange({
                 width: window.innerWidth,
                 height: window.innerHeight,
                 parent: document.body,
-                enemyFill: 'white',
-                bulletFill: 'white',
-                gunFill: 'white',
-                statsFill: 'white',
-                bgFill: 'green'
+                bgFill: 'green',
+                gun: { fill: 'white' },
+                bullet: { fill: 'white' },
+                target: { fill: 'white' },
+                stats: { fill: 'white', fontFamily: 'sans-serif' }
             });
         </script>
 
