@@ -29,7 +29,7 @@ export class Stats extends Component {
         let ctx = this.ctx,
             opts = this.options;
 
-        ctx.font = `${this.fontSize} ${opts.fontFamily}`;
+        ctx.font = `${this.fontSize}px ${opts.fontFamily}`;
         ctx.fillStyle = opts.fill;
         ctx.textBaseline = 'top';
         ctx.fillText(this.text, this.x, this.y);
