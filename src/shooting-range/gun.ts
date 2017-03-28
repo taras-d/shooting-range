@@ -3,6 +3,7 @@ import { RectComponent } from './component';
 
 export interface GunOptions {
     fill: string;
+    aim: boolean;
 }
 
 export class Gun extends RectComponent {
@@ -40,6 +41,28 @@ export class Gun extends RectComponent {
 
         ctx.fillStyle = opts.fill;
         ctx.fillRect(this.x, this.y, this.width, this.height);
+
+        if (opts.aim) {
+            this.drawAim();
+        }
+    }
+
+    drawAim(): void {
+
+        let ctx = this.ctx,
+            opts = this.options,
+            x = Math.round(this.x + this.width / 2);
+
+        ctx.save();
+
+        ctx.strokeStyle = opts.fill;
+        ctx.setLineDash([12, 12]);
+        ctx.beginPath();
+        ctx.moveTo(x, this.y);
+        ctx.lineTo(x, 0);
+        ctx.stroke();
+
+        ctx.restore();
     }
 
 }
