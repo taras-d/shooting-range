@@ -1,7 +1,6 @@
 import { Component } from './component';
 
 export interface StatsOptions {
-    fontSize: number;
     fontFamily: string;
     fill: string;
 }
@@ -14,6 +13,7 @@ export class Stats extends Component {
         ctx: CanvasRenderingContext2D, 
         x: number, 
         y: number, 
+        public fontSize: number,
         public options: StatsOptions
     ) {
         super(ctx, x, y);
@@ -29,7 +29,7 @@ export class Stats extends Component {
         let ctx = this.ctx,
             opts = this.options;
 
-        ctx.font = `${opts.fontSize} ${opts.fontFamily}`;
+        ctx.font = `${this.fontSize} ${opts.fontFamily}`;
         ctx.fillStyle = opts.fill;
         ctx.textBaseline = 'top';
         ctx.fillText(this.text, this.x, this.y);

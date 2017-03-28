@@ -2,7 +2,7 @@
 <html>
     <head>
 
-        <title>The enemy comes</title>
+        <title>Shooting range</title>
 
         <style>
             canvas {
@@ -19,15 +19,15 @@
         <script src="src/bundle.js"></script>
 
         <script>
-            var game = new EnemyComes({
+            var game = new ShootingRange({
                 width: 500,
                 height: 500,
                 parent: document.body,
-                targetFill: 'green',
-                bulletFill: 'green',
-                gunFill: 'green',
-                statsFill: 'black',
-                bgFill: 'white'
+                bgFill: 'white',
+                gun: { fill: 'green' },
+                bullet: { fill: 'green' },
+                target: { fill: 'green' },
+                stats: { fill: 'black', fontFamily: 'sans-serif' }
             });
         </script>
 
