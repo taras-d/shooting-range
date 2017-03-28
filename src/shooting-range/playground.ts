@@ -194,7 +194,7 @@ export class Playground {
             }
 
             // Set bullet status to Miss if bullet out of canvas
-            if (bullet.bottom <= 0) {
+            if (bullet.y + bullet.radius <= 0) {
                 bullet.status = BulletStatus.Miss;
                 continue;
             }
