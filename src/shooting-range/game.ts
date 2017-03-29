@@ -1,5 +1,12 @@
 import { Playground, PlaygroundOptions } from './playground';
 
+export enum Key { 
+    Space = 32, 
+    Left = 37,
+    Up = 38,
+    Right = 39
+}
+
 export class Game {
 
     playground: Playground;
@@ -7,22 +14,24 @@ export class Game {
     canvas: HTMLCanvasElement;
     canvasRect: ClientRect;
 
-    framePerSecond: number;
+    FPS: number = 50;
     frameId: number;
 
-    newTargetsMs: number;
+    newTargetsDelay: number = 2000;
     newTargetsId: number;
 
-    bulletsQueueMs: number;
-    bulletsQueueId: number;
+    fireDelay: number = 150;
+    fireId: number;
+
+    keys = [];
 
     constructor(options: PlaygroundOptions) {
 
-        let playground = new Playground(options);
+        let pg = new Playground(options);
 
-        this.playground = playground;
-        this.canvas = playground.canvas;
-        this.canvasRect = playground.canvas.getBoundingClientRect();
+        this.playground = pg;
+        this.canvas = pg.canvas;
+        this.canvasRect = pg.canvas.getBoundingClientRect();
 
         this.bindMethods();
         this.newGame();
@@ -33,10 +42,12 @@ export class Game {
         this.onMouseMove = this.onMouseMove.bind(this);
         this.onMouseDown = this.onMouseDown.bind(this);
         this.onMouseUp = this.onMouseUp.bind(this);
+        
+        this.onKeyDown = this.onKeyDown.bind(this);
+        this.onKeyUp = this.onKeyUp.bind(this);
 
-        this.onFrameUpdate = this.onFrameUpdate.bind(this);
+        this.onNewFrame = this.onNewFrame.bind(this);
         this.onNewTargets = this.onNewTargets.bind(this);
-        this.onBulletsQueue = this.onBulletsQueue.bind(this);
     }
 
     newGame(): void {
@@ -47,33 +58,69 @@ export class Game {
         this.canvas.addEventListener('mousemove', this.onMouseMove);
         this.canvas.addEventListener('mousedown', this.onMouseDown);
         this.canvas.addEventListener('mouseup', this.onMouseUp);
+
+        // Keyboard events
+        window.addEventListener('keydown', this.onKeyDown);
+        window.addEventListener('keyup', this.onKeyUp);
         
-        // Frame
-        this.framePerSecond = 50;
-        this.frameId = setInterval(this.onFrameUpdate, 1000 / this.framePerSecond);
+        // Frame interval
+        this.frameId = setInterval(this.onNewFrame, 1000 / this.FPS);
 
-        // New enemies
-        this.newTargetsMs = 2000;
-        this.newTargetsId = setInterval(this.onNewTargets, this.newTargetsMs);
-
-        // Bullets queue
-        this.bulletsQueueMs = 150;
+        // New targets interval
+        this.newTargetsId = setInterval(this.onNewTargets, this.newTargetsDelay);
     }
 
     stopGame(): void {
 
-        this.canvas.removeEventListener('mousemove', this.onMouseMove);
-        this.canvas.removeEventListener('mousedown', this.onMouseDown);
-        this.canvas.removeEventListener('mouseup', this.onMouseUp);
+        let canvas = this.canvas;
+
+        canvas.removeEventListener('mousemove', this.onMouseMove);
+        canvas.removeEventListener('mousedown', this.onMouseDown);
+        canvas.removeEventListener('mouseup', this.onMouseUp);
+
+        window.removeEventListener('keydown', this.onKeyDown);
+        window.removeEventListener('keyup', this.onKeyUp);
 
         clearInterval(this.frameId);
         clearInterval(this.newTargetsId);
-        clearInterval(this.bulletsQueueId);
+        clearInterval(this.fireId);
     }
 
-    onFrameUpdate(): void {
-        this.playground.draw();
-        if (this.playground.gameOver) {
+    startFire(): void {
+
+        if (this.fireId) {
+            return;
+        }
+
+        let pg = this.playground;
+
+        // Create first bullet
+        pg.createBullet();
+
+        // Create next bullets with interval
+        clearInterval(this.fireId);
+        this.fireId = setInterval(() => pg.createBullet(), this.fireDelay);
+    }
+
+    stopFire(): void {
+        clearInterval(this.fireId);
+        this.fireId = null;
+    }
+
+    onNewFrame(): void {
+
+        let pg = this.playground,
+            keys = this.keys;
+
+        if (keys[Key.Left]) {
+            pg.moveGunLeft();
+        } else if (keys[Key.Right]) {
+            pg.moveGunRight();
+        }
+
+        pg.draw();
+
+        if (pg.gameOver) {
             this.stopGame();
         }
     }
@@ -82,26 +129,37 @@ export class Game {
         this.playground.createTargets();
     }
 
-    onBulletsQueue(): void {
-        this.playground.createBullet();
-    }
-
     onMouseMove(event: MouseEvent): void {
         let gun = this.playground.gun;
         gun.moveTo( Math.round( event.clientX - this.canvasRect.left - gun.width / 2 ) );
-        gun.draw();
     }
 
     onMouseDown(event: MouseEvent): void {
-
-        this.playground.createBullet();
-
-        clearInterval(this.bulletsQueueId);
-        this.bulletsQueueId = setInterval( this.onBulletsQueue, this.bulletsQueueMs );
+        this.startFire();
     }
 
     onMouseUp(event: MouseEvent): void {
-        clearInterval(this.bulletsQueueId);
+        this.stopFire();
+    }
+
+    onKeyDown(event: KeyboardEvent): void {
+
+        let key = event.keyCode || event.which;
+        this.keys[key] = true;
+
+        if (key === Key.Space || key === Key.Up) {
+            this.startFire();
+        }
+    }
+
+    onKeyUp(event: KeyboardEvent): void {
+
+        let key = event.keyCode || event.which;
+        this.keys[key] = false;
+
+        if (key === Key.Space || key === Key.Up) {
+            this.stopFire();
+        }
     }
 
     destroy(): void {

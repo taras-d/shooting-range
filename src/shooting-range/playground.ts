@@ -25,6 +25,7 @@ export class Playground {
     gameOver: boolean;
 
     gun: Gun;
+    gunStep: number;
 
     bullets: Bullet[];
     bulletsLen: number;
@@ -41,7 +42,8 @@ export class Playground {
         this.width = options.width;
         this.height = options.height;
 
-        this.bulletStep = this.width * 0.01;
+        this.gunStep = this.perOfNum(1.7, this.width);
+        this.bulletStep = this.perOfNum(1, this.width);
 
         this.createCanvas();
         this.createStats();
@@ -314,6 +316,16 @@ export class Playground {
         let closest = this.closestTarget;
         this.gameOver = (
             closest && closest.y + closest.height >= this.gun.y );
+    }
+
+    moveGunRight(): void {
+        let gun = this.gun;
+        gun.moveTo( gun.x + this.gunStep );
+    }
+
+    moveGunLeft(): void {
+        let gun = this.gun;
+        gun.moveTo( gun.x - this.gunStep );
     }
 
     destroy(): void {
