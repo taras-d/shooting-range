@@ -1,4 +1,9 @@
-import { Playground, PlaygroundOptions } from './playground';
+import { Playground } from './playground';
+import { GunOptions } from './gun';
+import { BulletOptions } from './bullet';
+import { TargetOptions } from './target';
+import { StatsOptions } from './stats';
+import { merge } from './utils';
 
 export enum Key { 
     Space = 32, 
@@ -7,27 +12,67 @@ export enum Key {
     Right = 39
 }
 
+export interface GameOptions {
+    screen: {
+        width: number,
+        height: number
+    },
+    delays: {
+        targets: number,
+        fire: number,
+    },
+    bg: { 
+        fill: string 
+    },
+    gun: GunOptions,
+    bullet: BulletOptions,
+    target: TargetOptions,
+    stats: StatsOptions
+}
+
 export class Game {
+
+    static defaultOptions: GameOptions = {
+        screen: {
+            width: 500,
+            height: 500
+        },
+        delays: {
+            targets: 3000,
+            fire: 150
+        },
+        bg: { fill: 'white' },
+        gun: { fill: 'green', aim: false },
+        bullet: { fill: 'green' },
+        target: {
+            fill: 'green',
+            life: { fill: 'white', max: 3 }
+        },
+        stats: { fill: 'black' }
+    };
+
+    options: GameOptions;
+
+    parent: HTMLElement;
 
     playground: Playground;
 
     canvas: HTMLCanvasElement;
     canvasRect: ClientRect;
 
-    FPS: number = 50;
     frameId: number;
-
-    newTargetsDelay: number = 3000;
-    newTargetsId: number;
-
-    fireDelay: number = 150;
+    targetsId: number;
     fireId: number;
 
     keys = [];
 
-    constructor(options: PlaygroundOptions) {
+    constructor(options: GameOptions, parent: HTMLElement = document.body) {
 
-        let pg = new Playground(options);
+        this.options = merge({}, Game.defaultOptions, options) as GameOptions;
+
+        this.parent = parent;
+
+        let pg = new Playground(this.options, this.parent);
 
         this.playground = pg;
         this.canvas = pg.canvas;
@@ -64,10 +109,10 @@ export class Game {
         window.addEventListener('keyup', this.onKeyUp);
         
         // Frame interval
-        this.frameId = setInterval(this.onNewFrame, 1000 / this.FPS);
+        this.frameId = setInterval(this.onNewFrame, 1000 / 50);
 
         // New targets interval
-        this.newTargetsId = setInterval(this.onNewTargets, this.newTargetsDelay);
+        this.targetsId = setInterval(this.onNewTargets, this.options.delays.targets);
     }
 
     stopGame(): void {
@@ -82,7 +127,7 @@ export class Game {
         window.removeEventListener('keyup', this.onKeyUp);
 
         clearInterval(this.frameId);
-        clearInterval(this.newTargetsId);
+        clearInterval(this.targetsId);
         clearInterval(this.fireId);
     }
 
@@ -99,7 +144,7 @@ export class Game {
 
         // Create next bullets with interval
         clearInterval(this.fireId);
-        this.fireId = setInterval(() => pg.createBullet(), this.fireDelay);
+        this.fireId = setInterval(() => pg.createBullet(), this.options.delays.fire);
     }
 
     stopFire(): void {

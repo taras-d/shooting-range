@@ -20,10 +20,11 @@
 
         <script>
             var game = new ShootingRange({
-                width: window.innerWidth,
-                height: window.innerHeight,
-                parent: document.body,
-                bgFill: 'green',
+                screen: {
+                    width: window.innerWidth,
+                    height: window.innerHeight,
+                },
+                bg: { fill: 'green' },
                 gun: { fill: 'white' },
                 bullet: { fill: 'white' },
                 target: { 

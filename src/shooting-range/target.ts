@@ -6,6 +6,7 @@ export class TargetOptions {
     fill: string;
     life: { 
         fill: string;
+        max: number;
     }
 }
 
@@ -19,14 +20,14 @@ export class Target extends RectComponent {
         x: number, 
         y: number, 
         width: number, 
-        height: number, 
+        height: number,
         public options: TargetOptions
     ) {
 
         super(ctx, x, y, width, height);
 
-        this.life = randomNum(1, 3);
-        this.lifeFontSize = perOfNum(4, width);
+        this.life = randomNum(1, options.life.max);
+        this.lifeFontSize = perOfNum(40, width);
     }
 
     draw(): void {
@@ -52,7 +53,7 @@ export class Target extends RectComponent {
         ctx.fillStyle = opts.life.fill;
         ctx.textBaseline = 'middle';
         ctx.textAlign = 'center';
-        ctx.font = `${this.lifeFontSize} sans-serif`;
+        ctx.font = `${this.lifeFontSize}px sans-serif`;
         ctx.fillText(this.life + '', x, y);
     }
 

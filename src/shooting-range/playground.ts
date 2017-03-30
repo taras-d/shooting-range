@@ -1,19 +1,9 @@
+import { GameOptions } from './game';
 import { Gun, GunOptions } from './gun';
 import { Bullet, BulletStatus, BulletOptions } from './bullet';
 import { Target, TargetOptions } from './target';
 import { Stats, StatsOptions } from './stats';
 import { perOfNum } from './utils';
-
-export interface PlaygroundOptions {
-    width: number,
-    height: number,
-    parent: HTMLElement,
-    bgFill: string,
-    gun: GunOptions,
-    bullet: BulletOptions,
-    target: TargetOptions,
-    stats: StatsOptions
-}
 
 export class Playground {
 
@@ -38,10 +28,10 @@ export class Playground {
 
     stats: Stats;
 
-    constructor(public options: PlaygroundOptions) {
+    constructor(public options: GameOptions, public parent: HTMLElement) {
 
-        this.width = options.width;
-        this.height = options.height;
+        this.width = options.screen.width;
+        this.height = options.screen.height;
 
         this.gunStep = perOfNum(1.7, this.width);
         this.bulletStep = perOfNum(1, this.height);
@@ -78,7 +68,7 @@ export class Playground {
         this.canvas = canvas;
         this.ctx = canvas.getContext('2d');
 
-        this.options.parent.appendChild(canvas);
+        this.parent.appendChild(canvas);
     }
 
     createStats = function(): void {
@@ -155,7 +145,7 @@ export class Playground {
     }
 
     clear(): void {
-        this.ctx.fillStyle = this.options.bgFill;
+        this.ctx.fillStyle = this.options.bg.fill;
         this.ctx.fillRect(0, 0, this.width, this.height);
     }
 
@@ -322,7 +312,7 @@ export class Playground {
     }
 
     destroy(): void {
-        this.options.parent.removeChild(this.canvas);
+        this.parent.removeChild(this.canvas);
     }
 
 }
