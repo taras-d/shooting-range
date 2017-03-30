@@ -2,6 +2,7 @@ import { Gun, GunOptions } from './gun';
 import { Bullet, BulletStatus, BulletOptions } from './bullet';
 import { Target, TargetOptions } from './target';
 import { Stats, StatsOptions } from './stats';
+import { perOfNum } from './utils';
 
 export interface PlaygroundOptions {
     width: number,
@@ -42,8 +43,8 @@ export class Playground {
         this.width = options.width;
         this.height = options.height;
 
-        this.gunStep = this.perOfNum(1.7, this.width);
-        this.bulletStep = this.perOfNum(1, this.height);
+        this.gunStep = perOfNum(1.7, this.width);
+        this.bulletStep = perOfNum(1, this.height);
 
         this.createCanvas();
         this.createStats();
@@ -82,9 +83,9 @@ export class Playground {
 
     createStats = function(): void {
 
-        let x = this.perOfNum(2, this.width),
-            y = this.perOfNum(95, this.height),
-            fontSize = this.perOfNum(2.5, this.height);
+        let x = perOfNum(2, this.width),
+            y = perOfNum(95, this.height),
+            fontSize = perOfNum(2.5, this.height);
 
         this.stats = new Stats(
             this.ctx, x, y, fontSize, this.options.stats );
@@ -94,8 +95,8 @@ export class Playground {
 
         let stats = this.stats;
 
-        let width = this.perOfNum(6, this.width),
-            height = this.perOfNum(6, this.width),
+        let width = perOfNum(6, this.width),
+            height = perOfNum(6, this.width),
             x = Math.round( (this.width / 2) - (width / 2) ),
             y = Math.round( stats.y - stats.fontSize - height );
             
@@ -110,7 +111,7 @@ export class Playground {
 
         let x = gun.x + gun.width / 2,
             y = gun.y,
-            radius = this.perOfNum(1, this.width);
+            radius = perOfNum(1, this.width);
 
         bullets.push(
             new Bullet(this.ctx, x, y, radius, this.options.bullet )
@@ -125,7 +126,7 @@ export class Playground {
             targetsLen = this.targetsLen,
             targetsInRow = 12;
         
-        let gap = this.perOfNum(1.8, this.width),
+        let gap = perOfNum(1.8, this.width),
             size = Math.round( (this.width - gap) / targetsInRow ),
             x = gap,
             y = gap,
@@ -133,9 +134,9 @@ export class Playground {
             height = size - gap;
 
         // Shift down old targets
-        for (let i = 0, target; i < targetsLen; ++i) {
+        for (let i = 0, target: Target; i < targetsLen; ++i) {
             target = targets[i];
-            if (!target.hit) {
+            if (target.active()) {
                 target.y = (target.y + target.height + gap);
                 target.draw();
             }
@@ -215,8 +216,7 @@ export class Playground {
         
         let bullets = this.bullets,
             bulletsLen = this.bulletsLen,
-            bullet: Bullet,
-            hitBullet: Bullet;
+            bullet: Bullet;
 
         let closestTarget = targets[0];
 
@@ -224,34 +224,27 @@ export class Playground {
 
             target = targets[i];
 
-            // Skip hit targets
-            if (target.hit) {
+            // Skip inactive targets
+            if (!target.active()) {
                 continue;
             }
 
             // Check if bullet hit target
-            hitBullet = null;
             for (let j = 0; j < bulletsLen; ++j) {
                 bullet = bullets[j];
                 if (target.hitByBullet(bullet)) {
-                    hitBullet = bullet;
+                    --target.life;
+                    bullet.status = BulletStatus.Hit;
                     break;
                 }
             }
 
-            // Bullet hit target
-            if (hitBullet) {
-                target.hit = true;
-                hitBullet.status = BulletStatus.Hit;
-                continue;
-            }
-
-            // Draw target
-            target.draw();
-
-            // Save closest
-            if (target.y + target.height > closestTarget.y + closestTarget.height) {
-                closestTarget = target;
+            // Draw active targes and save closest target
+            if (target.active()) {
+                target.draw();
+                if (target.y + target.height > closestTarget.y + closestTarget.height) {
+                    closestTarget = target;
+                }
             }
         }
 
@@ -330,10 +323,6 @@ export class Playground {
 
     destroy(): void {
         this.options.parent.removeChild(this.canvas);
-    }
-
-    perOfNum(per: number, num: number): number {
-        return Math.round(per * num / 100);
     }
 
 }

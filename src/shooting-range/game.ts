@@ -17,7 +17,7 @@ export class Game {
     FPS: number = 50;
     frameId: number;
 
-    newTargetsDelay: number = 2000;
+    newTargetsDelay: number = 3000;
     newTargetsId: number;
 
     fireDelay: number = 150;

@@ -1,7 +1,6 @@
 import { Component } from './component';
 
 export interface StatsOptions {
-    fontFamily: string;
     fill: string;
 }
 
@@ -29,9 +28,10 @@ export class Stats extends Component {
         let ctx = this.ctx,
             opts = this.options;
 
-        ctx.font = `${this.fontSize}px ${opts.fontFamily}`;
+        ctx.font = `${this.fontSize}px sans-serif`;
         ctx.fillStyle = opts.fill;
         ctx.textBaseline = 'top';
+        ctx.textAlign = 'start';
         ctx.fillText(this.text, this.x, this.y);
     }
 
