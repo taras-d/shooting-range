@@ -37,7 +37,7 @@ export class Target extends RectComponent {
 
         let bLeft = bullet.x - bullet.radius,
             bRight = bullet.x + bullet.radius,
-            bTop = bullet.y;
+            bTop = bullet.y - bullet.radius;
 
         return (
             bullet.status === BulletStatus.None &&

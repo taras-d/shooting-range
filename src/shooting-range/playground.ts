@@ -43,7 +43,7 @@ export class Playground {
         this.height = options.height;
 
         this.gunStep = this.perOfNum(1.7, this.width);
-        this.bulletStep = this.perOfNum(1, this.width);
+        this.bulletStep = this.perOfNum(1, this.height);
 
         this.createCanvas();
         this.createStats();
@@ -333,7 +333,7 @@ export class Playground {
     }
 
     perOfNum(per: number, num: number): number {
-        return Math.floor(per * num / 100);
+        return Math.round(per * num / 100);
     }
 
 }
