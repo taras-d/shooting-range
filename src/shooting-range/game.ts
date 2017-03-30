@@ -214,4 +214,5 @@ export class Game {
 
 }
 
+// Save constructor in global scope
 window['ShootingRange'] = Game;
