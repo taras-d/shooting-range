@@ -229,7 +229,7 @@ export class Playground {
                 }
             }
 
-            // Draw active targes and save closest target
+            // Draw active targets and save closest target
             if (target.active()) {
                 target.draw();
                 if (target.y + target.height > closestTarget.y + closestTarget.height) {
