@@ -38,7 +38,7 @@ export class Game {
             height: 500
         },
         delays: {
-            targets: 3000,
+            targets: 2000,
             fire: 150
         },
         bg: { fill: 'white' },
@@ -46,7 +46,7 @@ export class Game {
         bullet: { fill: 'green' },
         target: {
             fill: 'green',
-            life: { fill: 'white', max: 3 }
+            life: { fill: 'white', max: 1 }
         },
         stats: { fill: 'black' }
     };
