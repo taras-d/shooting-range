@@ -51,20 +51,18 @@ export class Game {
         stats: { fill: 'black' }
     };
 
-    options: GameOptions;
+    private options: GameOptions;
 
-    parent: HTMLElement;
+    private parent: HTMLElement;
+    private canvas: HTMLCanvasElement;
 
-    playground: Playground;
+    private playground: Playground;
 
-    canvas: HTMLCanvasElement;
-    canvasRect: ClientRect;
+    private frameId: number;
+    private targetsId: number;
+    private fireId: number;
 
-    frameId: number;
-    targetsId: number;
-    fireId: number;
-
-    keys = [];
+    private keys = [];
 
     constructor(options: GameOptions, parent: HTMLElement = document.body) {
 
@@ -76,7 +74,6 @@ export class Game {
 
         this.playground = pg;
         this.canvas = pg.canvas;
-        this.canvasRect = pg.canvas.getBoundingClientRect();
 
         this.bindMethods();
         this.newGame();
@@ -175,8 +172,7 @@ export class Game {
     }
 
     onMouseMove(event: MouseEvent): void {
-        let gun = this.playground.gun;
-        gun.moveTo( Math.round( event.clientX - this.canvasRect.left - gun.width / 2 ) );
+        this.playground.moveGunByMouse(event);
     }
 
     onMouseDown(event: MouseEvent): void {
