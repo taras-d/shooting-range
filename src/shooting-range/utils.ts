@@ -4,7 +4,7 @@ export function perOfNum(per: number, num: number): number {
 }
 
 export function randomNum(min: number, max: number): number {
-    return Math.round( Math.random() * (max - min) ) + min;
+    return Math.floor( Math.random() * (max - min + 1) ) + min;
 }
 
 export function merge(
