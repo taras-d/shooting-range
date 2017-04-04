@@ -7,26 +7,28 @@ import { perOfNum } from './utils';
 
 export class Playground {
 
-    ctx: CanvasRenderingContext2D;
     canvas: HTMLCanvasElement;
-
-    width: number;
-    height: number;
 
     gameOver: boolean;
 
-    gun: Gun;
-    gunStep: number;
+    private ctx: CanvasRenderingContext2D;
+    private canvasRect: ClientRect;
 
-    bullets: Bullet[];
-    bulletsLen: number;
-    bulletStep: number;
+    private width: number;
+    private height: number;
 
-    targets: Target[];
-    targetsLen: number;
-    closestTarget: Target;
+    private gun: Gun;
+    private gunStep: number;
 
-    stats: Stats;
+    private bullets: Bullet[];
+    private bulletsLen: number;
+    private bulletStep: number;
+
+    private targets: Target[];
+    private targetsLen: number;
+    private closestTarget: Target;
+
+    private stats: Stats;
 
     constructor(public options: GameOptions, public parent: HTMLElement) {
 
@@ -55,8 +57,6 @@ export class Playground {
         this.stats.update(0, 0, 0);
 
         this.createTargets();
-
-        this.draw();
     }
 
     createCanvas(): void {
@@ -69,6 +69,8 @@ export class Playground {
         this.ctx = canvas.getContext('2d');
 
         this.parent.appendChild(canvas);
+
+        this.canvasRect = canvas.getBoundingClientRect();
     }
 
     createStats = function(): void {
@@ -301,14 +303,32 @@ export class Playground {
             closest && closest.y + closest.height >= this.gun.y );
     }
 
+    moveGun(x: number): void {
+
+        let gun = this.gun,
+            xMin = 0,
+            xMax = this.width - gun.width;
+
+        if (x < xMin) {
+            x = xMin;
+        } else if (x > xMax) {
+            x = xMax;
+        }
+
+        gun.x = x;
+    }
+
+    moveGunByMouse(event: MouseEvent): void {
+        this.moveGun(
+            event.clientX - this.canvasRect.left - this.gun.width / 2 );
+    }
+
     moveGunRight(): void {
-        let gun = this.gun;
-        gun.moveTo( gun.x + this.gunStep );
+        this.moveGun( this.gun.x + this.gunStep );
     }
 
     moveGunLeft(): void {
-        let gun = this.gun;
-        gun.moveTo( gun.x - this.gunStep );
+        this.moveGun( this.gun.x - this.gunStep );
     }
 
     destroy(): void {

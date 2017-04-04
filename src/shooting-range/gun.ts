@@ -19,21 +19,6 @@ export class Gun extends RectComponent {
         super(ctx, x, y, width, height);
     }
 
-    moveTo(x: number): void {
-
-        let ctx = this.ctx,
-            leftMin = 0,
-            leftMax = ctx.canvas.width - this.width;
-
-        if (x < leftMin) {
-            x = leftMin;
-        } else if (x > leftMax) {
-            x = leftMax;
-        }
-
-        this.x = x;
-    }
-
     draw(): void {
 
         let opts = this.options,
