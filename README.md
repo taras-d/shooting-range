@@ -2,7 +2,7 @@
 
 HTML canvas game
 
-[Play](https://taras-d.github.io/shooting-range)
+[Play](https://taras-d.github.io/demo/shooting-range)
 
 ## Installation notes
 1. `npm install` - install Node modules
